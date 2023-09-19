@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class Agent2 {
+public class Agent3 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -18,19 +18,8 @@ public class Agent2 {
             int count5 = Collections.frequency(dices, "5");
             int count6 = Collections.frequency(dices, "6");
 
-            if (dices.size() <= 4 || count1 > 2 || count2 > 2 || count3 > 2 || count4 > 2 || count5 > 2 || count6 > 2){
+            if (count1 > 2 || count2 > 2 || count3 > 2 || count4 > 2 || count5 > 2 || count6 > 2){
                 System.out.println("pass");
-            }
-            else if (count1 == 2) {
-                System.out.println("1 1");
-            }
-            else if (count5 == 2) {
-                System.out.println("5 5");
-            }
-            else if (count1 == 1) {
-                System.out.println("1");
-            } else if (count5 == 1) {
-                System.out.println("5");
             }
             else {
                 System.out.println("none");

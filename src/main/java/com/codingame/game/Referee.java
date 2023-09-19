@@ -1,6 +1,9 @@
 package com.codingame.game;
 
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
+
+import org.yaml.snakeyaml.scanner.Constant;
+
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.MultiplayerGameManager;
@@ -15,6 +18,7 @@ public class Referee extends AbstractReferee {
 
     private int currentPlayer = 0;
     private Board board = null;
+    private static final int WINNING_SCORE = 2000;
 
     @Override
     public void init() {
@@ -29,6 +33,9 @@ public class Referee extends AbstractReferee {
         }
 
         System.out.println(String.format("Next board |%s|",board.toString()));
+        gameManager.addToGameSummary(
+            String.format("Board |%s| for %s", board.toString(), player.getNicknameToken())
+        );
 
         // Check the score
         if (board.getScore() == 0) {
@@ -40,31 +47,41 @@ public class Referee extends AbstractReferee {
             );
             currentPlayer = currentPlayer == 0 ? 1 : 0;
             board = new Board(6);
-        } else {
+        }
+        // Check if turn is over
+        else if (board.turnIsOver()) {
+            player.setScore(player.getScore() + board.getTotalScore());
             gameManager.addToGameSummary(
-                String.format("Board |%s| for %s", board.toString(), player.getNicknameToken())
+                String.format("%s ends his turn with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
             );
+            // Check for winner
+            if (player.getScore() > WINNING_SCORE) {
+                gameManager.addToGameSummary(GameManager.formatSuccessMessage(player.getNicknameToken() + " won!"));
+                gameManager.endGame();
+            } else {
+                currentPlayer = currentPlayer == 0 ? 1 : 0;
+                board = new Board(6);
+            }
+        }
 
-
+        else {
             player.sendInputLine(board.toString());
             player.execute();
-
-
             try {
-                //List<String> outputs = player.getOutputs();
                 // Check validity of the player output and compute the new game state
                 String output = player.getOutputs().get(0);
                 if (output.equals("pass")) {
                     player.setScore(player.getScore() + board.getTotalScore());
                     gameManager.addToGameSummary(
-                        String.format("%s pass for %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
+                        String.format("%s passes with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
                     );
-
-                    currentPlayer = currentPlayer == 0 ? 1 : 0;
-                    board = new Board(6);
-                    if (player.getScore() > 2000) {
+                    // Check for winner
+                    if (player.getScore() > WINNING_SCORE) {
                         gameManager.addToGameSummary(GameManager.formatSuccessMessage(player.getNicknameToken() + " won!"));
                         gameManager.endGame();
+                    } else {
+                        currentPlayer = currentPlayer == 0 ? 1 : 0;
+                        board = new Board(6);
                     }
                 } else if (!board.applyChoice(output)) {
                     throw new InvalidBoard("Invalid board.");

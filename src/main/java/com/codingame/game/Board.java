@@ -12,12 +12,14 @@ public class Board {
   Random random = new Random(0);
   private List<String> dices = new ArrayList<>();;
   private int totalScore;
+  private int turn;
 
   public Board(int size) {
       for(int i=0; i < size;i++) {
         this.dices.add(String.valueOf(ThreadLocalRandom.current().nextInt(1, 7)));
       }
       this.totalScore = 0;
+      this.turn = 1;
   }
 
   @Override
@@ -107,19 +109,26 @@ public class Board {
     return score;
   }
 
+  public Boolean turnIsOver() {
+    return this.turn == 3;
+  }
+
   public Boolean applyChoice(String line) {
-    List<String> dices = Arrays.asList(line.split(" "));
+    this.turn++;
+    if (!line.equals("none")) {
+      List<String> dices = Arrays.asList(line.split(" "));
 
-    for (String dice : dices) {
-      if (this.dices.contains(dice)) {
-        this.dices.remove(dice);
-      } else {
-        return false;
+      for (String dice : dices) {
+        if (this.dices.contains(dice)) {
+          this.dices.remove(dice);
+        } else {
+          return false;
+        }
       }
-    }
 
-    // Update total score
-    this.totalScore += calculateScore(dices);
+      // Update total score
+      this.totalScore += calculateScore(dices);
+    }
 
     // Roll the remaining dices
     for(int i=0; i < this.dices.size(); i++) {
