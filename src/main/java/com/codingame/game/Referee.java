@@ -1,8 +1,8 @@
 package com.codingame.game;
-import java.util.List;
 
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
+import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.google.inject.Inject;
@@ -13,6 +13,9 @@ public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
 
+    private int currentPlayer = 0;
+    private Board board = null;
+
     @Override
     public void init() {
         // Initialize your game here.
@@ -20,18 +23,67 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void gameTurn(int turn) {
-        for (Player player : gameManager.getActivePlayers()) {
-            player.sendInputLine("input");
-            player.execute();
+        Player player = gameManager.getPlayer(currentPlayer);
+        if (board == null) {
+            board = new Board(6);
         }
 
-        for (Player player : gameManager.getActivePlayers()) {
+        System.out.println(String.format("Next board |%s|",board.toString()));
+
+        // Check the score
+        if (board.getScore() == 0) {
+            // Player lose
+            gameManager.addToGameSummary(
+                GameManager.formatErrorMessage(
+                    String.format("%s lose %d points with board |%s|", player.getNicknameToken(), board.getTotalScore(), board.toString())
+                )
+            );
+            currentPlayer = currentPlayer == 0 ? 1 : 0;
+            board = new Board(6);
+        } else {
+            gameManager.addToGameSummary(
+                String.format("Board |%s| for %s", board.toString(), player.getNicknameToken())
+            );
+
+
+            player.sendInputLine(board.toString());
+            player.execute();
+
+
             try {
-                List<String> outputs = player.getOutputs();
+                //List<String> outputs = player.getOutputs();
                 // Check validity of the player output and compute the new game state
+                String output = player.getOutputs().get(0);
+                if (output.equals("pass")) {
+                    player.setScore(player.getScore() + board.getTotalScore());
+                    gameManager.addToGameSummary(
+                        String.format("%s pass for %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
+                    );
+
+                    currentPlayer = currentPlayer == 0 ? 1 : 0;
+                    board = new Board(6);
+                    if (player.getScore() > 2000) {
+                        gameManager.addToGameSummary(GameManager.formatSuccessMessage(player.getNicknameToken() + " won!"));
+                        gameManager.endGame();
+                    }
+                } else if (!board.applyChoice(output)) {
+                    throw new InvalidBoard("Invalid board.");
+                } else {
+                    gameManager.addToGameSummary(
+                        String.format("%s keeps |%s|", player.getNicknameToken(), output)
+                    );
+                }
+
             } catch (TimeoutException e) {
+                gameManager.addToGameSummary(GameManager.formatErrorMessage(String.format("$%d timeout!", player.getIndex())));
                 player.deactivate(String.format("$%d timeout!", player.getIndex()));
+            } catch (InvalidBoard e) {
+                gameManager.addToGameSummary(GameManager.formatErrorMessage(player.getNicknameToken() + " lose!"));
+                gameManager.addToGameSummary(GameManager.formatErrorMessage(board.toString()));
+                player.deactivate(e.getMessage());
+                player.setScore(-1);
+                gameManager.endGame();
             }
-        }        
+        }
     }
 }
