@@ -13,7 +13,7 @@ import com.google.inject.Inject;
 public class GameGrid {
     @Inject private GraphicEntityModule graphicEntityModule;
 
-    private String[] images = { "dice_0.png", "dice_1.png", "dice_2.png", "dice_3.png", "dice_4.png", "dice_5.png", "dice_6.png" };
+    private String[] images = { "blank", "dice_1.png", "dice_2.png", "dice_3.png", "dice_4.png", "dice_5.png", "dice_6.png" };
 
     private Group entity;
     private List<Sprite> placeholders = new ArrayList<>(6);
