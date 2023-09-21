@@ -31,11 +31,15 @@ public class Agent2 {
                 System.out.println("1");
             } else if (count5 == 1) {
                 System.out.println("5");
+            } else if (count6 == 1) {
+                System.out.println("6");
+            } else if (count4 == 1) {
+                System.out.println("4");
+            } else if (count3 == 1) {
+                System.out.println("3");
+            } else if (count2 == 1) {
+                System.out.println("2");
             }
-            else {
-                System.out.println("none");
-            }
-
 
         }
     }

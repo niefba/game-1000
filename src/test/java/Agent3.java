@@ -21,8 +21,18 @@ public class Agent3 {
             if (count1 > 2 || count2 > 2 || count3 > 2 || count4 > 2 || count5 > 2 || count6 > 2){
                 System.out.println("pass");
             }
-            else {
-                System.out.println("none");
+            else if (count1 == 1) {
+                System.out.println("1");
+            } else if (count5 == 1) {
+                System.out.println("5");
+            } else if (count6 == 1) {
+                System.out.println("6");
+            } else if (count4 == 1) {
+                System.out.println("4");
+            } else if (count3 == 1) {
+                System.out.println("3");
+            } else if (count2 == 1) {
+                System.out.println("2");
             }
 
 

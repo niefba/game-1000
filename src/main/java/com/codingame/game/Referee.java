@@ -65,7 +65,7 @@ public class Referee extends AbstractReferee {
     public void gameTurn(int turn) {
         Player player = gameManager.getPlayer(currentPlayer);
         if (board == null) {
-            board = new Board(6);
+            board = new Board();
         }
 
         System.out.println(String.format("Next board |%s|",board.toString()));
@@ -85,7 +85,7 @@ public class Referee extends AbstractReferee {
                 )
             );
             currentPlayer = currentPlayer == 0 ? 1 : 0;
-            board = new Board(6);
+            board = new Board();
         }
         // Check if turn is over
         else if (board.turnIsOver()) {
@@ -99,7 +99,7 @@ public class Referee extends AbstractReferee {
                 gameManager.endGame();
             } else {
                 currentPlayer = currentPlayer == 0 ? 1 : 0;
-                board = new Board(6);
+                board = new Board();
             }
         }
 
@@ -120,7 +120,7 @@ public class Referee extends AbstractReferee {
                         gameManager.endGame();
                     } else {
                         currentPlayer = currentPlayer == 0 ? 1 : 0;
-                        board = new Board(6);
+                        board = new Board();
                     }
                 } else if (!board.applyChoice(output)) {
                     throw new InvalidBoard("Invalid board.");
