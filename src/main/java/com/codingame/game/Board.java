@@ -31,6 +31,10 @@ public class Board {
     return calculateScore(this.dices);
   }
 
+  public List<String> getDices() {
+    return this.dices;
+  }
+
   public Integer getTotalScore() {
     return this.totalScore + calculateScore(this.dices);
   }

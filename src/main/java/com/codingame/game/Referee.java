@@ -9,13 +9,16 @@ import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public class Referee extends AbstractReferee {
     // Uncomment the line below and comment the line under it to create a Solo Game
     // @Inject private SoloGameManager<Player> gameManager;
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject private GraphicEntityModule graphicEntityModule;
+    @Inject private Provider<GameGrid> GameGridProvider;
 
+    private GameGrid masterGrid;
     private int currentPlayer = 0;
     private Board board = null;
     private static final int WINNING_SCORE = 2000;
@@ -23,6 +26,39 @@ public class Referee extends AbstractReferee {
     @Override
     public void init() {
         // Initialize your game here.
+        drawBackground();
+        drawGrids();
+    }
+
+    private void drawBackground() {
+        graphicEntityModule.createSprite()
+                .setImage("Background.jpg")
+                .setAnchor(0);
+        graphicEntityModule.createSprite()
+                .setImage("logo.png")
+                .setX(280)
+                .setY(915)
+                .setAnchor(0.5);
+        graphicEntityModule.createSprite()
+                .setImage("logoCG.png")
+                .setX(1920 - 280)
+                .setY(915)
+                .setAnchor(0.5);
+    }
+
+    private void drawGrids() {
+        int bigCellSize = 240;
+        //int bigOrigX = (int) Math.round(1920 / 2 - bigCellSize);
+        int bigOrigX = (int) Math.round(1920 / 2 - 2.5 * bigCellSize);
+        int bigOrigY = (int) Math.round(1080 / 2 - bigCellSize);
+        masterGrid = GameGridProvider.get();
+        masterGrid.draw(bigOrigX, bigOrigY, bigCellSize, 5, 0xf9b700);
+        /* graphicEntityModule
+            .createSprite()
+            .setImage("board_border.png")
+            .setX(1920 / 2)
+            .setY(1080 / 2)
+            .setAnchor(0.5); */
     }
 
     @Override
@@ -36,6 +72,9 @@ public class Referee extends AbstractReferee {
         gameManager.addToGameSummary(
             String.format("Board |%s| for %s", board.toString(), player.getNicknameToken())
         );
+
+        masterGrid.drawBoard(board);
+
 
         // Check the score
         if (board.getScore() == 0) {
