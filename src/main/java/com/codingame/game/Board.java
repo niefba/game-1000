@@ -1,22 +1,19 @@
 package com.codingame.game;
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-//import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class Board {
-  Random random = new Random(0);
-  private List<String> dices = new ArrayList<>();;
+  private List<Dice> dices = new ArrayList<>();
   private int totalScore;
   private int turn;
+  private static final int DICE_NB = 6;
 
   public Board() {
-      for(int i=0; i < 6;i++) {
-        this.dices.add(String.valueOf(ThreadLocalRandom.current().nextInt(1, 7)));
+      for(int i=0; i < DICE_NB;i++) {
+        this.dices.add(new Dice());
       }
       this.totalScore = 0;
       this.turn = 1;
@@ -24,29 +21,32 @@ public class Board {
 
   @Override
   public String toString() {
-      return this.dices.stream().map(Object::toString).collect(Collectors.joining(" "));
+      return dices.stream().filter(dice -> dice.isUnlock()).map(Dice::getName).collect(Collectors.joining(" "));
   }
 
-  public Integer getScore() {
-    return calculateScore(this.dices);
+  public Integer getLastScore() {
+    List<Dice> unlockDices = this.dices.stream().filter(dice -> dice.isUnlock()).collect(Collectors.toList());
+    return calculateScore(unlockDices);
   }
 
-  public List<String> getDices() {
+  public List<Dice> getDices() {
     return this.dices;
   }
 
   public Integer getTotalScore() {
-    return this.totalScore + calculateScore(this.dices);
+    return this.totalScore + getLastScore();
   }
 
-  private Integer calculateScore(List<String> dices) {
+  private Integer calculateScore(List<Dice> dices) {
+    List<String> diceNames = dices.stream().map(Dice::getName).collect(Collectors.toList());
+
     int score = 0;
-    int count1 = Collections.frequency(dices, "1");
-    int count2 = Collections.frequency(dices, "2");
-    int count3 = Collections.frequency(dices, "3");
-    int count4 = Collections.frequency(dices, "4");
-    int count5 = Collections.frequency(dices, "5");
-    int count6 = Collections.frequency(dices, "6");
+    int count1 = Collections.frequency(diceNames, "1");
+    int count2 = Collections.frequency(diceNames, "2");
+    int count3 = Collections.frequency(diceNames, "3");
+    int count4 = Collections.frequency(diceNames, "4");
+    int count5 = Collections.frequency(diceNames, "5");
+    int count6 = Collections.frequency(diceNames, "6");
 
     if (count1 == 1 && count1 == count2 && count1 == count3 && count1 == count4 && count1 == count5 && count1 == count6) {
       score += 1000;
@@ -120,23 +120,36 @@ public class Board {
   public Boolean applyChoice(String line) {
     this.turn++;
 
-    List<String> dices = Arrays.asList(line.split(" "));
+    List<String> diceNames = Arrays.asList(line.split(" "));
+    List<Dice> selectedDices = new ArrayList<>();
 
-    for (String dice : dices) {
-      if (this.dices.contains(dice)) {
-        this.dices.remove(dice);
-      } else {
-        return false;
+    // Check that dices are available
+    for (String diceName : diceNames) {
+      for(Dice dice : this.dices) {
+        if(dice.getName().equals(diceName) && dice.isUnlock()) {
+          System.out.println(String.format("diceName %s",diceName));
+          dice.lock();
+          selectedDices.add(dice);
+          break;
+        }
       }
     }
 
-    // Update total score
-    this.totalScore += calculateScore(dices);
-
-    // Roll the remaining dices
-    for(int i=0; i < this.dices.size(); i++) {
-      this.dices.set(i, String.valueOf(ThreadLocalRandom.current().nextInt(1, 7)));
+    // Dice not found
+    if (selectedDices.size() != diceNames.size()) {
+      return false;
     }
+
+    // Update total score
+    this.totalScore += calculateScore(selectedDices);
+
+    // Roll remaining dices
+    for(Dice dice : this.dices) {
+      if(dice.isUnlock()) {
+        dice.roll();
+      }
+    }
+
     return true;
   }
 }

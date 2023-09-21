@@ -1,9 +1,5 @@
 package com.codingame.game;
-
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
-
-import org.yaml.snakeyaml.scanner.Constant;
-
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.MultiplayerGameManager;
@@ -48,17 +44,10 @@ public class Referee extends AbstractReferee {
 
     private void drawGrids() {
         int bigCellSize = 240;
-        //int bigOrigX = (int) Math.round(1920 / 2 - bigCellSize);
         int bigOrigX = (int) Math.round(1920 / 2 - 2.5 * bigCellSize);
         int bigOrigY = (int) Math.round(1080 / 2 - bigCellSize);
         masterGrid = GameGridProvider.get();
-        masterGrid.draw(bigOrigX, bigOrigY, bigCellSize, 5, 0xf9b700);
-        /* graphicEntityModule
-            .createSprite()
-            .setImage("board_border.png")
-            .setX(1920 / 2)
-            .setY(1080 / 2)
-            .setAnchor(0.5); */
+        masterGrid.draw(bigOrigX, bigOrigY, bigCellSize);
     }
 
     @Override
@@ -77,7 +66,7 @@ public class Referee extends AbstractReferee {
 
 
         // Check the score
-        if (board.getScore() == 0) {
+        if (board.getLastScore() == 0) {
             // Player lose
             gameManager.addToGameSummary(
                 GameManager.formatErrorMessage(
@@ -141,5 +130,7 @@ public class Referee extends AbstractReferee {
                 gameManager.endGame();
             }
         }
+
+        masterGrid.drawScore(gameManager.getPlayers());
     }
 }
