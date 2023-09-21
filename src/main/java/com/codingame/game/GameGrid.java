@@ -48,6 +48,15 @@ public class GameGrid {
 
     public void drawScore(List<Player> players) {
         this.scoreText.setText(String.format("%05d vs %05d", players.get(0).getScore(), players.get(1).getScore()));
+        graphicEntityModule.commitEntityState(1, this.scoreText);
+    }
+
+    public void drawWinner(Player player) {
+        this.scoreText.setText(String.format("%s won!", player.getNicknameToken()));
+        this.scoreText.setScale(0);
+        graphicEntityModule.commitEntityState(0.2, this.scoreText);
+        this.scoreText.setScale(1, Curve.ELASTIC);
+        graphicEntityModule.commitEntityState(1, this.scoreText);
     }
 
     public void drawBoard(Board board) {
@@ -72,21 +81,5 @@ public class GameGrid {
 
     private int convert(int orig, int cellSize, double unit) {
         return (int) (orig + unit * cellSize);
-    }
-
-    public void hide() {
-        this.entity.setAlpha(0);
-        this.entity.setVisible(false);
-    }
-
-    public void activate() {
-        this.entity.setAlpha(1, Curve.NONE);
-        graphicEntityModule.commitEntityState(1, entity);
-    }
-
-    public void deactivate() {
-            this.entity.setAlpha(0, Curve.NONE);
-            //graphicEntityModule.commitEntityState(1, entity);
-            graphicEntityModule.commitEntityState(0.1, entity);
     }
 }

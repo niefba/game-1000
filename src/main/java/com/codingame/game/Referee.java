@@ -31,7 +31,7 @@ public class Referee extends AbstractReferee {
                 .setImage("Background.jpg")
                 .setAnchor(0);
         graphicEntityModule.createSprite()
-                .setImage("logo.png")
+                .setImage("logo_small.png")
                 .setX(280)
                 .setY(915)
                 .setAnchor(0.5);
@@ -48,6 +48,18 @@ public class Referee extends AbstractReferee {
         int bigOrigY = (int) Math.round(1080 / 2 - bigCellSize);
         masterGrid = GameGridProvider.get();
         masterGrid.draw(bigOrigX, bigOrigY, bigCellSize);
+    }
+
+    private boolean noWinner(Player player) {
+        if (player.getScore() > WINNING_SCORE) {
+            masterGrid.drawWinner(player);
+            gameManager.addToGameSummary(GameManager.formatSuccessMessage(player.getNicknameToken() + " won!"));
+            gameManager.endGame();
+            return false;
+        } else {
+            masterGrid.drawScore(gameManager.getPlayers());
+            return true;
+        }
     }
 
     @Override
@@ -83,10 +95,7 @@ public class Referee extends AbstractReferee {
                 String.format("%s ends his turn with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
             );
             // Check for winner
-            if (player.getScore() > WINNING_SCORE) {
-                gameManager.addToGameSummary(GameManager.formatSuccessMessage(player.getNicknameToken() + " won!"));
-                gameManager.endGame();
-            } else {
+            if (noWinner(player)) {
                 currentPlayer = currentPlayer == 0 ? 1 : 0;
                 board = new Board();
             }
@@ -104,10 +113,7 @@ public class Referee extends AbstractReferee {
                         String.format("%s passes with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
                     );
                     // Check for winner
-                    if (player.getScore() > WINNING_SCORE) {
-                        gameManager.addToGameSummary(GameManager.formatSuccessMessage(player.getNicknameToken() + " won!"));
-                        gameManager.endGame();
-                    } else {
+                    if (noWinner(player)) {
                         currentPlayer = currentPlayer == 0 ? 1 : 0;
                         board = new Board();
                     }
@@ -131,6 +137,6 @@ public class Referee extends AbstractReferee {
             }
         }
 
-        masterGrid.drawScore(gameManager.getPlayers());
+
     }
 }
