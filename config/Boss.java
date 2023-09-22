@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class Agent1 {
+public class Boss {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 

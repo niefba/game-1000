@@ -1,54 +1,19 @@
-This project is the skeleton for the creation of a game using the Game Engine Toolkit of [CodinGame](https://codingame.com).
+# 10000 CodinGame
 
-Check the documentation on the [github repository](https://github.com/CodinGame/codingame-sdk-doc).
+## Purpose
 
-## Note about the game turn implementation
-There are 2 ways to implement your game turn according to the game you want to create. **The simultaneous mode** or the **Turn by Turn mode**.
+This project is a game using the Game Engine Toolkit of [CodinGame](https://codingame.com).
 
-### The simultaneous mode
-It's a game mode where all players receive the game data and execute their actions in the same turn. (eg: Race, Pong, ...)
+Check the documentation on the [CodinGame SDK](https://github.com/CodinGame/codingame-sdk-doc).
 
-```java
-for (Player player : gameManager.getActivePlayers()) {
-    player.sendInputLine(input);
-    player.execute();
-}
+It contains a 2 player game where both players perform actions turn by turn, with a single league including a Boss ai.
 
-for (Player player : gameManager.getActivePlayers()) {
-    try {
-        List<String> outputs = player.getOutputs();
-        // Check validity of the player output and compute the new game state
-    } catch (TimeoutException e) {
-        player.deactivate(String.format("$%d timeout!", player.getIndex()));
-    }
-}
+## Build
 
-// Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
-```
+Clone this project & download the Maven dependencies.
 
-### The Turn by Turn mode:
-It's a game mode where only one player execute an action during a turn. (eg: TicTacToe, Chess)
+## Run
 
-```java
-SkeletonPlayer player = gameManager.getPlayer(turn % playerCount);
-player.sendInputLine(input);
-player.execute();
-try {
-    List<String> outputs = player.getOutputs();
-    // Check validity of the player output and compute the new game state
-} catch (TimeoutException e) {
-    player.deactivate(String.format("$%d timeout!", player.getIndex()));
-    player.setScore(-1);
-    gameManager.endGame();
-}
+Launch `src/test/java/Main.java` to launch a local game with `Player1.java` vs `Player2.java`
 
-// Check if there is a win / lose situation and call gameManager.endGame(); when game is finished
-```
-
-## Loading assets
-Assets are expected to be placed in the `src/main/resources/view/assets` folder of your game's project.
-
-You can then use the images in the texture cache with the Entity Module:
-```java
-entityManager.createSprite.setImage("background.jpg");
-```
+The rules of 10.000 are explained in `config/statement_en.html`
