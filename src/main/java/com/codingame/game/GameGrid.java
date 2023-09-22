@@ -17,11 +17,14 @@ public class GameGrid {
 
     private Group entity;
     private List<Sprite> placeholders = new ArrayList<>(6);
-    private Text scoreText;
+    private Text[] scoreText = new Text[2];
+    private Text versusText;
 
     public void draw(int origX, int origY, int cellSize) {
         this.entity = graphicEntityModule.createGroup();
-        this.scoreText = graphicEntityModule.createText();
+        this.scoreText[0] = graphicEntityModule.createText();
+        this.scoreText[1] = graphicEntityModule.createText();
+        this.versusText = graphicEntityModule.createText();
 
         for(int i=0;i<6;i++) {
             Sprite placeholder = graphicEntityModule.createSprite()
@@ -35,7 +38,8 @@ public class GameGrid {
             this.placeholders.add(i, placeholder);
         }
 
-        scoreText.setText("")
+        versusText.setText("vs")
+                    .setVisible(false)
                     .setX(1920/2)
                     .setY(200)
                     .setZIndex(20)
@@ -43,23 +47,54 @@ public class GameGrid {
                     .setFontSize(100)
                     .setFillColor(0xf2bb13)
                     .setAnchor(0.5);
-        this.entity.add(scoreText);
+        this.entity.add(versusText);
+
+        scoreText[0].setText("")
+                    .setX(660)
+                    .setY(200)
+                    .setZIndex(20)
+                    .setFontFamily("Arial")
+                    .setFontSize(100)
+                    .setFillColor(0xffffff)
+                    .setAnchor(0.5);
+        this.entity.add(scoreText[0]);
+        scoreText[1].setText("")
+                    .setX(1920 - 660)
+                    .setY(200)
+                    .setZIndex(20)
+                    .setFontFamily("Arial")
+                    .setFontSize(100)
+                    .setFillColor(0xffffff)
+                    .setAnchor(0.5);
+        this.entity.add(scoreText[1]);
     }
 
-    public void drawScore(List<Player> players) {
-        this.scoreText.setText(String.format("%05d vs %05d", players.get(0).getScore(), players.get(1).getScore()));
-        graphicEntityModule.commitEntityState(1, this.scoreText);
+    public void drawScore(List<Player> players, int currentPlayer) {
+        int otherPlayer = currentPlayer == 0 ? 1 : 0;
+        this.versusText.setVisible(true);
+
+        this.scoreText[0].setText(String.format("%d", players.get(0).getScore()));
+        this.scoreText[1].setText(String.format("%d", players.get(1).getScore()));
+        graphicEntityModule.commitEntityState(0, this.scoreText[0], this.scoreText[1]);
+
+        this.scoreText[currentPlayer].setFillColor(0xffffff, Curve.EASE_IN);
+        this.scoreText[otherPlayer].setFillColor(0x5a5a5a, Curve.EASE_IN);
+        graphicEntityModule.commitEntityState(0.5, this.scoreText[0], this.scoreText[1]);
     }
 
     public void drawWinner(Player player) {
-        this.scoreText.setText(String.format("%s won!", player.getNicknameToken()));
-        this.scoreText.setScale(0);
-        graphicEntityModule.commitEntityState(0.2, this.scoreText);
-        this.scoreText.setScale(1, Curve.ELASTIC);
-        graphicEntityModule.commitEntityState(1, this.scoreText);
+        this.scoreText[0].setVisible(false);
+        this.scoreText[1].setVisible(false);
+        graphicEntityModule.commitEntityState(0, this.scoreText[0], this.scoreText[1]);
+
+        this.versusText.setText(String.format("%s won!", player.getNicknameToken()));
+        this.versusText.setScale(0);
+        graphicEntityModule.commitEntityState(0.2, this.versusText);
+        this.versusText.setScale(1, Curve.ELASTIC);
+        graphicEntityModule.commitEntityState(1, this.versusText);
     }
 
-    public void drawBoard(Board board) {
+    public void drawBoard(Board board, List<Player> players, int currentPlayer) {
         List<Dice> dices = board.getDices();
 
         for(int i = 0; i < placeholders.size(); i++) {
@@ -77,6 +112,8 @@ public class GameGrid {
                 graphicEntityModule.commitEntityState(1, placeholders.get(i));
             }
         }
+
+        drawScore(players, currentPlayer);
     }
 
     private int convert(int orig, int cellSize, double unit) {

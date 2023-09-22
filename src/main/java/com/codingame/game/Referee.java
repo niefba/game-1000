@@ -50,14 +50,13 @@ public class Referee extends AbstractReferee {
         masterGrid.draw(bigOrigX, bigOrigY, bigCellSize);
     }
 
-    private boolean noWinner(Player player) {
+    private boolean noWinner(Player player, int currentPlayer) {
         if (player.getScore() > WINNING_SCORE) {
             masterGrid.drawWinner(player);
             gameManager.addToGameSummary(GameManager.formatSuccessMessage(player.getNicknameToken() + " won!"));
             gameManager.endGame();
             return false;
         } else {
-            masterGrid.drawScore(gameManager.getPlayers());
             return true;
         }
     }
@@ -74,8 +73,7 @@ public class Referee extends AbstractReferee {
             String.format("Board |%s| for %s", board.toString(), player.getNicknameToken())
         );
 
-        masterGrid.drawBoard(board);
-
+        masterGrid.drawBoard(board, gameManager.getPlayers(), currentPlayer);
 
         // Check the score
         if (board.getLastScore() == 0) {
@@ -95,7 +93,7 @@ public class Referee extends AbstractReferee {
                 String.format("%s ends his turn with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
             );
             // Check for winner
-            if (noWinner(player)) {
+            if (noWinner(player, currentPlayer)) {
                 currentPlayer = currentPlayer == 0 ? 1 : 0;
                 board = new Board();
             }
@@ -113,7 +111,7 @@ public class Referee extends AbstractReferee {
                         String.format("%s passes with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
                     );
                     // Check for winner
-                    if (noWinner(player)) {
+                    if (noWinner(player, currentPlayer)) {
                         currentPlayer = currentPlayer == 0 ? 1 : 0;
                         board = new Board();
                     }
