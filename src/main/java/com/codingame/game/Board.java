@@ -16,7 +16,7 @@ public class Board {
         this.dices.add(new Dice());
       }
       this.totalScore = 0;
-      this.turn = 1;
+      this.turn = 0;
   }
 
   @Override
@@ -114,7 +114,7 @@ public class Board {
   }
 
   public Boolean turnIsOver() {
-    return this.turn == 3;
+    return this.turn == 2;
   }
 
   public Boolean applyChoice(String line) {
@@ -146,7 +146,7 @@ public class Board {
     // Roll remaining dices
     for(Dice dice : this.dices) {
       if(dice.isUnlock()) {
-        dice.roll();
+        dice.roll(this.turn);
       }
     }
 

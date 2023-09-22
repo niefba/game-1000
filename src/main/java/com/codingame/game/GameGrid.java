@@ -17,6 +17,7 @@ public class GameGrid {
 
     private Group entity;
     private List<Sprite> placeholders = new ArrayList<>(6);
+    private List<Text> diceLabels = new ArrayList<>(6);
     private Text[] scoreText = new Text[2];
     private Text versusText;
 
@@ -36,6 +37,26 @@ public class GameGrid {
                 .setAnchor(0.5);
             this.entity.add(placeholder);
             this.placeholders.add(i, placeholder);
+
+            // Group label with strike and text
+            Group entityLabel = graphicEntityModule.createGroup(
+                graphicEntityModule.createSprite().setImage("label.png")
+            )
+                .setX(convert(origX - cellSize/2, cellSize, i))
+                .setY(convert(origY - cellSize/2, cellSize, 1))
+                .setZIndex(20)
+                .setVisible(false);
+            Text label = graphicEntityModule.createText("1st")
+                    .setX(100/2)
+                    .setY(100/2)
+                    .setZIndex(20)
+                    .setFontFamily("Arial")
+                    .setFontSize(50)
+                    .setFillColor(0xffffff)
+                    .setAnchor(0.5);;
+            this.diceLabels.add(i, label);
+            entityLabel.add(label);
+            this.entity.add(entityLabel);
         }
 
         versusText.setText("vs")
@@ -72,11 +93,11 @@ public class GameGrid {
     public void drawScore(List<Player> players, int currentPlayer) {
         int otherPlayer = currentPlayer == 0 ? 1 : 0;
         this.versusText.setVisible(true);
-
         this.scoreText[0].setText(String.format("%d", players.get(0).getScore()));
         this.scoreText[1].setText(String.format("%d", players.get(1).getScore()));
-        graphicEntityModule.commitEntityState(0, this.scoreText[0], this.scoreText[1]);
+        graphicEntityModule.commitEntityState(0, this.versusText, this.scoreText[0], this.scoreText[1]);
 
+        // Enhance the score of current player
         this.scoreText[currentPlayer].setFillColor(0xffffff, Curve.EASE_IN);
         this.scoreText[otherPlayer].setFillColor(0x5a5a5a, Curve.EASE_IN);
         graphicEntityModule.commitEntityState(0.5, this.scoreText[0], this.scoreText[1]);
@@ -101,8 +122,13 @@ public class GameGrid {
             // Update dices value
             placeholders.get(i).setImage(images[dices.get(i).getValue()]);
 
-            // Animate arrival for rolled dices
+            // Animate arrival for rolled dices and hide labels
             if (!dices.get(i).isLock()) {
+                // Hide label
+                diceLabels.get(i).getParent().get().setVisible(false);
+                graphicEntityModule.commitEntityState(0, diceLabels.get(i).getParent().get());
+
+                // Animate arrival for dice
                 placeholders.get(i).setScale(0);
                 graphicEntityModule.commitEntityState(0.2, placeholders.get(i));
                 placeholders.get(i).setRotation(3, Curve.EASE_IN);
@@ -110,6 +136,11 @@ public class GameGrid {
                 placeholders.get(i).setRotation(0, Curve.EASE_OUT);
                 placeholders.get(i).setScale(1, Curve.ELASTIC);
                 graphicEntityModule.commitEntityState(1, placeholders.get(i));
+            } else {
+                // Update label
+                diceLabels.get(i).setText(dices.get(i).getLabel());
+                diceLabels.get(i).getParent().get().setVisible(true);
+                graphicEntityModule.commitEntityState(0, diceLabels.get(i), diceLabels.get(i).getParent().get());
             }
         }
 
