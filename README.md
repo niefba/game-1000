@@ -1,4 +1,4 @@
-# 10000 CodinGame
+# 10.000 CodinGame
 
 ## Purpose
 

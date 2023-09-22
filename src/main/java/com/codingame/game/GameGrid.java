@@ -40,18 +40,18 @@ public class GameGrid {
 
             // Group label with strike and text
             Group entityLabel = graphicEntityModule.createGroup(
-                graphicEntityModule.createSprite().setImage("label.png")
+                graphicEntityModule.createSprite().setImage("lock.png")
             )
                 .setX(convert(origX - cellSize/2, cellSize, i))
-                .setY(convert(origY - cellSize/2, cellSize, 1))
+                .setY(convert(origY - cellSize/2 - 40, cellSize, 1))
                 .setZIndex(20)
                 .setVisible(false);
             Text label = graphicEntityModule.createText("1st")
                     .setX(100/2)
-                    .setY(100/2)
+                    .setY(75)
                     .setZIndex(20)
                     .setFontFamily("Arial")
-                    .setFontSize(50)
+                    .setFontSize(40)
                     .setFillColor(0xffffff)
                     .setAnchor(0.5);;
             this.diceLabels.add(i, label);
