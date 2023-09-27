@@ -8,6 +8,7 @@ public class Player1 {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            String size = scanner.nextLine();
             String input = scanner.nextLine();
             List<String> dices = Arrays.asList(input.split(" "));
             int count1 = Collections.frequency(dices, "1");

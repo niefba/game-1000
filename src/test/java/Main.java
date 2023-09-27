@@ -7,7 +7,7 @@ public class Main {
 
         // Adds as many player as you need to test your game
         gameRunner.addAgent(Player1.class);
-        gameRunner.addAgent(Player2.class);
+        gameRunner.addAgent(PlayerSimple.class);
         //gameRunner.addAgent(Agent3.class);
 
         // Another way to add a player

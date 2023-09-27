@@ -24,6 +24,10 @@ public class Board {
       return dices.stream().filter(dice -> dice.isUnlock()).map(Dice::getName).collect(Collectors.joining(" "));
   }
 
+  public int diceCount() {
+      return this.dices.stream().filter(dice -> dice.isUnlock()).collect(Collectors.toList()).size();
+  }
+
   public Integer getLastScore() {
     List<Dice> unlockDices = this.dices.stream().filter(dice -> dice.isUnlock()).collect(Collectors.toList());
     return calculateScore(unlockDices);

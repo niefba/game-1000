@@ -100,6 +100,7 @@ public class Referee extends AbstractReferee {
         }
 
         else {
+            player.sendInputLine(String.valueOf(board.diceCount()));
             player.sendInputLine(board.toString());
             player.execute();
             try {
