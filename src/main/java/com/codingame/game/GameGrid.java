@@ -62,7 +62,7 @@ public class GameGrid {
         versusText.setText("vs")
                     .setVisible(false)
                     .setX(1920/2)
-                    .setY(200)
+                    .setY(220)
                     .setZIndex(20)
                     .setFontFamily("Arial")
                     .setFontSize(100)
@@ -72,7 +72,7 @@ public class GameGrid {
 
         scoreText[0].setText("")
                     .setX(660)
-                    .setY(200)
+                    .setY(220)
                     .setZIndex(20)
                     .setFontFamily("Arial")
                     .setFontSize(100)
@@ -81,7 +81,7 @@ public class GameGrid {
         this.entity.add(scoreText[0]);
         scoreText[1].setText("")
                     .setX(1920 - 660)
-                    .setY(200)
+                    .setY(220)
                     .setZIndex(20)
                     .setFontFamily("Arial")
                     .setFontSize(100)

@@ -4,6 +4,8 @@ import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.entities.Sprite;
+import com.codingame.gameengine.module.entities.Text;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -23,6 +25,7 @@ public class Referee extends AbstractReferee {
     public void init() {
         // Initialize your game here.
         drawBackground();
+        drawHud();
         drawGrids();
     }
 
@@ -48,6 +51,51 @@ public class Referee extends AbstractReferee {
         int bigOrigY = (int) Math.round(1080 / 2 - bigCellSize);
         masterGrid = GameGridProvider.get();
         masterGrid.draw(bigOrigX, bigOrigY, bigCellSize);
+    }
+
+    private void drawHud() {
+        for (Player player : gameManager.getPlayers()) {
+            int x = player.getIndex() == 0 ? 280 : 1920 - 280;
+            int y = 220;
+
+            graphicEntityModule
+                    .createRectangle()
+                    .setWidth(140)
+                    .setHeight(140)
+                    .setX(x - 70)
+                    .setY(y - 70)
+                    .setLineWidth(0)
+                    .setFillColor(player.getColorToken());
+
+            graphicEntityModule
+                    .createRectangle()
+                    .setWidth(120)
+                    .setHeight(120)
+                    .setX(x - 60)
+                    .setY(y - 60)
+                    .setLineWidth(0)
+                    .setFillColor(0x000000);
+
+            Text text = graphicEntityModule.createText(player.getNicknameToken())
+                    .setX(x)
+                    .setY(y + 120)
+                    .setZIndex(20)
+                    .setFontSize(40)
+                    .setFontFamily("Arial")
+                    .setFillColor(0xf2bb13)
+                    .setAnchor(0.5);
+
+            Sprite avatar = graphicEntityModule.createSprite()
+                    .setX(x)
+                    .setY(y)
+                    .setZIndex(20)
+                    .setImage(player.getAvatarToken())
+                    .setAnchor(0.5)
+                    .setBaseHeight(116)
+                    .setBaseWidth(116);
+
+            graphicEntityModule.createGroup(text, avatar);
+        }
     }
 
     private boolean noWinner(Player player, int currentPlayer) {
