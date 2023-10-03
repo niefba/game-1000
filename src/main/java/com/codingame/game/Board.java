@@ -64,10 +64,10 @@ public class Board {
           score += 2000;
           break;
         case 5:
-          score += 4000;
+          score += 3000;
           break;
         case 6:
-          score += 8000;
+          score += 4000;
           break;
         default:
           score += 100 * count1;
@@ -82,10 +82,10 @@ public class Board {
           score += 1000;
           break;
         case 5:
-          score += 2000;
+          score += 1500;
           break;
         case 6:
-          score += 4000;
+          score += 2000;
           break;
         default:
           score += 50 * count5;
