@@ -56,7 +56,7 @@ public class Referee extends AbstractReferee {
     private void drawHud() {
         for (Player player : gameManager.getPlayers()) {
             int x = player.getIndex() == 0 ? 280 : 1920 - 280;
-            int y = 220;
+            int y = 200;
 
             graphicEntityModule
                     .createRectangle()
@@ -177,7 +177,6 @@ public class Referee extends AbstractReferee {
                 player.deactivate(String.format("$%d timeout!", player.getIndex()));
             } catch (InvalidBoard e) {
                 gameManager.addToGameSummary(GameManager.formatErrorMessage(player.getNicknameToken() + " lose!"));
-                gameManager.addToGameSummary(GameManager.formatErrorMessage(board.toString()));
                 player.deactivate(e.getMessage());
                 player.setScore(-1);
                 gameManager.endGame();

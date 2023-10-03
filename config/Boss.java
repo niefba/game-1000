@@ -8,17 +8,39 @@ public class Boss {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            String size = scanner.nextLine();
             String input = scanner.nextLine();
             List<String> dices = Arrays.asList(input.split(" "));
+
             int count1 = Collections.frequency(dices, "1");
+            int count2 = Collections.frequency(dices, "2");
+            int count3 = Collections.frequency(dices, "3");
+            int count4 = Collections.frequency(dices, "4");
             int count5 = Collections.frequency(dices, "5");
-            if (count1 > 0 || count5 > 0) {
+            int count6 = Collections.frequency(dices, "6");
+
+            if (dices.size() <= 4 || count1 > 2 || count2 > 2 || count3 > 2 || count4 > 2 || count5 > 2 || count6 > 2){
                 System.out.println("pass");
-            } else {
-                System.out.println(dices.get(0));
             }
-
-
+            else if (count1 == 2) {
+                System.out.println("1 1");
+            }
+            else if (count5 == 2) {
+                System.out.println("5 5");
+            }
+            else if (count1 == 1) {
+                System.out.println("1");
+            } else if (count5 == 1) {
+                System.out.println("5");
+            } else if (count6 == 1) {
+                System.out.println("6");
+            } else if (count4 == 1) {
+                System.out.println("4");
+            } else if (count3 == 1) {
+                System.out.println("3");
+            } else if (count2 == 1) {
+                System.out.println("2");
+            }
         }
     }
 }
