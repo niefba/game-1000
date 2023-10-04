@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class Boss {
+class Player {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -41,6 +41,7 @@ public class Boss {
             } else if (count2 == 1) {
                 System.out.println("2");
             }
+
         }
     }
 }
