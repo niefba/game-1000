@@ -19,7 +19,7 @@ public class Referee extends AbstractReferee {
     private GameGrid masterGrid;
     private int currentPlayer = 0;
     private Board board = null;
-    private static final int WINNING_SCORE = 2000;
+    private static final int WINNING_SCORE = 10000;
 
     @Override
     public void init() {
