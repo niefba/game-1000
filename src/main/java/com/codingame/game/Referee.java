@@ -116,9 +116,9 @@ public class Referee extends AbstractReferee {
             board = new Board();
         }
 
-        System.out.println(String.format("Next board |%s|",board.toString()));
+        System.out.println(String.format("Next dice combination |%s|",board.toString()));
         gameManager.addToGameSummary(
-            String.format("Board |%s| for %s", board.toString(), player.getNicknameToken())
+            String.format("Dice combination |%s| for %s", board.toString(), player.getNicknameToken())
         );
 
         masterGrid.drawBoard(board, gameManager.getPlayers(), currentPlayer);
@@ -128,7 +128,7 @@ public class Referee extends AbstractReferee {
             // Player lose
             gameManager.addToGameSummary(
                 GameManager.formatErrorMessage(
-                    String.format("%s lose %d points with board |%s|", player.getNicknameToken(), board.getTotalScore(), board.toString())
+                    String.format("%s loses %d points with dice combination |%s|", player.getNicknameToken(), board.getTotalScore(), board.toString())
                 )
             );
             currentPlayer = currentPlayer == 0 ? 1 : 0;
@@ -138,7 +138,7 @@ public class Referee extends AbstractReferee {
         else if (board.turnIsOver()) {
             player.setScore(player.getScore() + board.getTotalScore());
             gameManager.addToGameSummary(
-                String.format("%s ends his turn with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
+                String.format("%s ends the turn with %d points and a total of %d points", player.getNicknameToken(), board.getTotalScore(), player.getScore())
             );
             // Check for winner
             if (noWinner(player, currentPlayer)) {
@@ -165,7 +165,7 @@ public class Referee extends AbstractReferee {
                         board = new Board();
                     }
                 } else if (!board.applyChoice(output)) {
-                    throw new InvalidBoard("Invalid board.");
+                    throw new InvalidBoard("Invalid dice combination.");
                 } else {
                     gameManager.addToGameSummary(
                         String.format("%s keeps |%s|", player.getNicknameToken(), output)
@@ -176,7 +176,7 @@ public class Referee extends AbstractReferee {
                 gameManager.addToGameSummary(GameManager.formatErrorMessage(String.format("$%d timeout!", player.getIndex())));
                 player.deactivate(String.format("$%d timeout!", player.getIndex()));
             } catch (InvalidBoard e) {
-                gameManager.addToGameSummary(GameManager.formatErrorMessage(player.getNicknameToken() + " lose!"));
+                gameManager.addToGameSummary(GameManager.formatErrorMessage(player.getNicknameToken() + " lost sending an invalid dice combination!"));
                 player.deactivate(e.getMessage());
                 player.setScore(-1);
                 gameManager.endGame();

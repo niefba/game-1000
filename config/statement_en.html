@@ -19,19 +19,18 @@
     <div class="statement-rules-content">
       <p>
         Players take turns.<br>
-        The player receives 6 dices
+        The player receives 6 dice.
       </p>
       <p>
-        If the dices are used to score points, you can either score the points or replay the dice.
+        The player may choose to pass and score the points, or re-roll the dice.
         <br>
-        To replay the dice, you must keep at least one of them.
+        To re-roll the dice, the player must keep at least one of the dice.
         <br>
         If a dice roll fails to score points, all accumulated points are lost.
       </p>
       <p>
         Each 1 is worth 100 points and each 5 is worth 50 points.
         A three of a kind is worth 100 times the value of the number on the dice, except in the case of a three of 1s, which is worth 1,000 points.
-        Each additional number identical to the one making up a three of a kind doubles the value of the combination immediately below it.
       </p>
       <ul>
         <li>A 5 is worth 50 points</li>
@@ -45,11 +44,13 @@
       </ul>
       <p>
         Four of a kind (four dice of the same value), five of a kind (five dice of the same value) and six of a kind (six dice of the same value) are incremented by the value of the corresponding three of a kind.
-        For example, a three of 2 is worth 200 points, a four of 2 is worth 400, a straight of 2 is worth 600 and a six of 2 is worth 800.
-        For a combination to count, <strong>it must be obtained in a single throw</strong>.
+        For example, a three of 2 is worth 200 points, a four of 2 is worth 400, a five of 2 is worth 600 and a six of 2 is worth 800.
       </p>
       <p>
-        A sequence of 1, 2, 3, 4, 5 and 6 in a single throw is worth 1,500 points.<br>
+        A sequence of 1, 2, 3, 4, 5 and 6 is worth 1,500 points.<br>
+      </p>
+      <p>
+        For a combination to count, <strong>it must be obtained in a single throw</strong>.
       </p>
     </div>
   </div>
@@ -64,20 +65,21 @@
 
     <p>
       <strong>First roll of the dice&nbsp;:</strong>
-      Player receives 6 dices with values <samp><const>1 4 1 1 3 6</const></samp><br>
-      Player keeps three dices of <samp>1</samp> for a score of <const>1000</const> points providing to the
+      Player receives 6 dice with values <samp><const>1 4 1 1 3 6</const></samp><br>
+      Player keeps three dice of <samp>1</samp> for a score of <const>1000</const> points providing to the
       standard output one line with <action>1 1 1</action>
     </p>
 
 
     <p>
       <strong>Second roll of the dice&nbsp;:</strong>
-      Player receives 3 dices with values <const><samp>2 5 1</samp></const><br>
+      Player receives 3 dice with values <const><samp>2 5 1</samp></const><br>
       Player passes for a score of <const>150</const> points and scores a total of <const>1000</const> + <const>150</const> = <const>1150</const> points providing to the
       standard output one line with <action>pass</action>
     </p>
 
   </div>
+
   <!-- WARNING -->
   <div class="statement-section statement-warning">
     <h1>
@@ -89,24 +91,54 @@
 
     </div>
   </div>
+
+  <!-- VICTORY CONDITIONS -->
+  <div class="statement-victory-conditions">
+    <div class="icon victory"></div>
+    <div class="blk">
+      <div class="title">Victory conditions</div>
+      <div class="text">
+        <ul>
+          <li>
+            Be the first to reach 10,000 points.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOSE CONDITIONS -->
+  <div class="statement-lose-conditions">
+    <div class="icon lose"></div>
+    <div class="blk">
+      <div class="title">Defeat conditions</div>
+      <div class="text">
+        <ul>
+          <li>
+            Your opponent reaches 10,000 points before you do.
+          </li>
+          <li>
+            Your code does not respond in time or returns an unrecognized command.
+          </li></ul>
+      </div>
+      </div>
+  </div>
+
+  <br>
+
   <!-- PROTOCOL -->
   <div class="statement-section statement-protocol">
     <h1>
       <span class="icon icon-protocol">&nbsp;</span>
       <span>Game Input</span>
     </h1>
-    <!-- Protocol block -->
-    <div class="blk">
-      <div class="text">The program must first read the initialization data from standard input. Then, provide to the
-        standard output one line with "pass" or a list of kept dices</div>
-    </div>
 
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Input</div>
       <div class="text">
-        <p><span class="statement-lineno">Line 1: </span>an integer <var>count</var>, the number of rolled dices</p>
-        <p><span class="statement-lineno">Line 2: </span>a string of integer <var>values</var>, the values of rolled dices</p>
+        <p><span class="statement-lineno">Line 1: </span>an integer <var>count</var>, the number of rolled dice</p>
+        <p><span class="statement-lineno">Line 2: </span>a string of space-separated integer <var>values</var>, the values of rolled dice</p>
       </div>
     </div>
 
@@ -114,18 +146,11 @@
     <div class="blk">
       <div class="title">Output</div>
       <div class="text">
-        <span class="statement-lineno">A single line</span> containing <action>pass</action> or a list of kept dices as a string of integer separated by spaces such as <action>1 1 5</action>.
+        <span class="statement-lineno">A single line</span> containing <action>pass</action> or a list of kept dice as a string of integers separated by spaces such as <action>1 1 5</action>.
         <br>
       </div>
     </div>
 
-    <!-- Protocol block -->
-    <div class="blk">
-      <div class="title">Constraints</div>
-      <div class="text">
-        The list of kept dices can't be empty.
-      </div>
-    </div>
   </div>
 
 </div>
